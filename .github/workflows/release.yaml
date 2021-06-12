@@ -1,0 +1,27 @@
+name: Release API client nuget
+
+on:
+  push:
+    tags: "*"
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 5.0.200
+    - name: Build
+      run: dotnet build --configuration Release
+    - name: Test
+      run: dotnet test --configuration Release      
+      
+    - name: Create the package
+      run: dotnet pack --configuration Release MyNoSqlServer.DataCompression/MyNoSqlServer.DataCompression.csproj /p:Version=${GITHUB_REF#refs/tags/}
+
+    - name: Publish the packaget
+      run: dotnet nuget push MyNoSqlServer.DataCompression/bin/Release/*.nupkg -s "https://api.nuget.org/v3/index.json" -k ${{ secrets.NUGET_TOCKEN }}
