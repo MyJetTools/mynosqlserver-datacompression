@@ -16,7 +16,7 @@ namespace MyNoSqlServer.DataCompression
 
         private const string ZipEntryName = "d";
 
-        public static ReadOnlyMemory<byte> ZipPayload(this ReadOnlyMemory<byte> source)
+        public static byte[] ZipPayload(this ReadOnlyMemory<byte> source)
         {
             using var memoryStream = new MemoryStream(source.Length);
             memoryStream.Write(source.Span);
@@ -25,7 +25,7 @@ namespace MyNoSqlServer.DataCompression
             return ZipPayload(memoryStream);
         }
 
-        public static ReadOnlyMemory<byte> ZipPayload(this MemoryStream sourceStream)
+        public static byte[] ZipPayload(this MemoryStream sourceStream)
         {
             var zipResultStream = new MemoryStream();
 
