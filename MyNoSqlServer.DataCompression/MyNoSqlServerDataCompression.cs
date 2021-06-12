@@ -9,10 +9,6 @@ namespace MyNoSqlServer.DataCompression
 {
     public static class MyNoSqlServerDataCompression
     {
-        public static ReadOnlyMemory<byte> ToReadOnlyMemory(this MemoryStream stream)
-        {
-            return new ReadOnlyMemory<byte>(stream.GetBuffer(), 0, (int)stream.Length);
-        }
 
         private const string ZipEntryName = "d";
 
@@ -43,7 +39,7 @@ namespace MyNoSqlServer.DataCompression
 
         private static readonly ReaderOptions ReaderOptions = new ReaderOptions();
 
-        public static ReadOnlyMemory<byte> UnZipPayload(this ReadOnlyMemory<byte> src)
+        public static byte[] UnZipPayload(this ReadOnlyMemory<byte> src)
         {
             
             var srcStream = new MemoryStream(src.Length);
@@ -58,7 +54,7 @@ namespace MyNoSqlServer.DataCompression
             
             reader.WriteEntryTo(resultStream);
 
-            return resultStream.ToReadOnlyMemory();
+            return resultStream.ToArray();
         }
     }
 }
